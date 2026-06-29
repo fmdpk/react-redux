@@ -242,6 +242,9 @@ main h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  width: 92%;
+  margin: auto;
 }
 
 .todoapp header.header .loader {

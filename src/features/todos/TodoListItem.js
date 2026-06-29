@@ -3,16 +3,33 @@ import React from 'react'
 import { ReactComponent as TimesSolid } from './times-solid.svg'
 
 import { availableColors, capitalize } from '../filters/colors'
+import { useSelector } from 'react-redux'
 
-const TodoListItem = ({ todo, onColorChange, onCompletedChange, onDelete }) => {
+const selectTodoById = (state, todoId) => {
+  return state.todos.find((todo) => todo.id === todoId)
+}
+
+const TodoListItem = ({
+  todoId,
+  onColorChange,
+  onCompletedChange,
+  onDelete,
+}) => {
+  // const { text, completed, color, id } = todo
+
+  const todo = useSelector((state) => selectTodoById(state, todoId))
   const { text, completed, color } = todo
 
   const handleCompletedChanged = (e) => {
-    onCompletedChange(e.target.checked)
+    onCompletedChange({ id: todoId, checked: e.target.checked })
   }
 
   const handleColorChanged = (e) => {
-    onColorChange(e.target.value)
+    onColorChange({ todoId: todoId, color: e.target.value })
+  }
+
+  const handleOnDelete = (e) => {
+    onDelete(todoId)
   }
 
   const colorOptions = availableColors.map((c) => (
@@ -43,7 +60,7 @@ const TodoListItem = ({ todo, onColorChange, onCompletedChange, onDelete }) => {
             <option value=""></option>
             {colorOptions}
           </select>
-          <button className="destroy" onClick={onDelete}>
+          <button className="destroy" onClick={handleOnDelete}>
             <TimesSolid />
           </button>
         </div>
