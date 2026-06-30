@@ -4,7 +4,6 @@ import TodoListItem from './TodoListItem'
 import { StatusFilters } from '../filters/filtersSlice'
 
 const selectTodoIds = (state) => {
-  console.log(state)
   switch (state.filters.status) {
     case StatusFilters.All:
       if (state.filters.colors.length) {
@@ -37,8 +36,6 @@ const selectTodoIds = (state) => {
       return state.todos.map((todo) => todo.id)
   }
 }
-
-// const selectTodoIds = (state) => state.todos.map((todo) => todo.id)
 
 const TodoList = () => {
   const todoIds = useSelector(selectTodoIds, shallowEqual)

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { saveNewTodo } from '../../api/fetchData'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -8,7 +9,10 @@ const Header = () => {
   const handleChange = (e) => setText(e.target.value)
 
   const addTodo = () => {
-    dispatch({ type: 'todos/todoAdded', payload: text.trim() })
+    // Create the thunk function with the text the user wrote
+    const saveNewTodoThunk = saveNewTodo(text.trim())
+    // Then dispatch the thunk function itself
+    dispatch(saveNewTodoThunk)
     setText('')
   }
 
@@ -17,7 +21,10 @@ const Header = () => {
     // If the user pressed the Enter key:
     if (e.key === 'Enter' && trimmedText) {
       // Dispatch the "todo added" action with this text
-      dispatch({ type: 'todos/todoAdded', payload: trimmedText })
+      // Create the thunk function with the text the user wrote
+      const saveNewTodoThunk = saveNewTodo(trimmedText)
+      // Then dispatch the thunk function itself
+      dispatch(saveNewTodoThunk)
       // And clear out the text input
       setText('')
     }
