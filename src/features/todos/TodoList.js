@@ -1,7 +1,9 @@
 import React from 'react'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import TodoListItem from './TodoListItem'
 import { StatusFilters } from '../filters/filtersSlice'
+import { todoCompleteChange } from './todosActions'
+import { createSelector } from 'reselect'
 
 const selectTodoIds = (state) => {
   switch (state.filters.status) {
@@ -37,13 +39,21 @@ const selectTodoIds = (state) => {
   }
 }
 
+export const selectTodoIdsReselect = createSelector(
+  // First, pass one or more "input selector" functions:
+  (state) => state,
+  // Then, an "output selector" that receives all the input results as arguments
+  // and returns a final result value
+  (state) => selectTodoIds(state)
+)
+
 const TodoList = () => {
-  const todoIds = useSelector(selectTodoIds, shallowEqual)
+  // const todoIds = useSelector(selectTodoIds, shallowEqual)
+  const todoIds = useSelector(selectTodoIdsReselect)
   const dispatch = useDispatch()
   console.log(todoIds)
 
-  const onCompletedChange = (data) =>
-    dispatch({ type: 'todos/todoToggled', payload: data.id })
+  const onCompletedChange = (data) => dispatch(todoCompleteChange(data.id))
 
   const onDelete = (id) => dispatch({ type: 'todos/todoDeleted', payload: id })
   const onColorChange = (data) =>

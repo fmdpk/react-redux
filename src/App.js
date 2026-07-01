@@ -4,12 +4,12 @@ import Header from './features/header/Header'
 import TodoList from './features/todos/TodoList'
 import Footer from './features/footer/Footer'
 import { useDispatch } from 'react-redux'
-import { fetchTodos } from './api/fetchData'
+import { getAllTodos } from './features/todos/todosActions'
 
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(fetchTodos)
+    getAllTodos(dispatch)
   }, [])
   return (
     <div className="App">
