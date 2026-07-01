@@ -1,3 +1,5 @@
+import { StatusFilters } from '../filters/filtersSlice'
+
 const initialState = []
 
 // function nextTodoId(todos) {
@@ -68,5 +70,33 @@ export default function todosReducer(state = initialState, action) {
     }
     default:
       return state
+  }
+}
+
+export const selectFilteredTodos = (state) => {
+  switch (state.filters.status) {
+    case StatusFilters.All:
+      if (state.filters.colors.length) {
+        return state.todos.filter((item) =>
+          state.filters.colors.includes(item.color)
+        )
+      }
+      return state.todos
+    case StatusFilters.Active:
+      if (state.filters.colors.length) {
+        let todos = state.todos.filter((item) => item.completed === false)
+        return todos.filter((item) => state.filters.colors.includes(item.color))
+      }
+      return state.todos.filter((item) => item.completed === false)
+
+    case StatusFilters.Completed:
+      if (state.filters.colors.length) {
+        let todos = state.todos.filter((item) => item.completed === true)
+        return todos.filter((item) => state.filters.colors.includes(item.color))
+      }
+      return state.todos.filter((item) => item.completed === true)
+
+    default:
+      return state.todos
   }
 }

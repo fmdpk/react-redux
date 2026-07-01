@@ -1,7 +1,10 @@
 import React from 'react'
 
 import { availableColors, capitalize } from '../filters/colors'
-import { StatusFilters } from '../filters/filtersSlice'
+import {
+  selectUncompletedTodosReselect,
+  StatusFilters,
+} from '../filters/filtersSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   colorFilterChanged,
@@ -12,26 +15,6 @@ import {
   markAllActiveAction,
   markAllCompleteAction,
 } from '../todos/todosActions'
-
-const selectTotalCompletedTodos = (state) => {
-  let result = []
-  switch (state.filters.status) {
-    case StatusFilters.All:
-      result = [...state.todos]
-      break
-    case StatusFilters.Active:
-      result = [...state.todos.filter((todo) => !todo.completed)]
-      break
-    case StatusFilters.Completed:
-      result = [...state.todos.filter((todo) => todo.completed)]
-      break
-
-    default:
-      break
-  }
-  const remainingTodos = result.filter((todo) => !todo.completed)
-  return remainingTodos.length
-}
 
 const selectFilterStatus = (state) => {
   return state.filters.status
@@ -114,7 +97,7 @@ const Footer = () => {
   const dispatch = useDispatch()
   const colors = useSelector(selectFilterColors)
   const status = useSelector(selectFilterStatus)
-  const todosRemaining = useSelector(selectTotalCompletedTodos)
+  const todosRemaining = useSelector(selectUncompletedTodosReselect)
 
   const onColorChange = (color, changeType) => {
     dispatch(colorFilterChanged(color, changeType))
@@ -125,15 +108,15 @@ const Footer = () => {
   }
 
   const markAllCompleted = () => {
-    dispatch(clearAllCompletedAction)
-  }
-
-  const clearAllCompleted = () => {
     dispatch(markAllCompleteAction())
   }
 
   const markAllActive = () => {
     dispatch(markAllActiveAction())
+  }
+
+  const clearAllCompleted = () => {
+    dispatch(clearAllCompletedAction())
   }
 
   return (

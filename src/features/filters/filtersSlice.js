@@ -1,3 +1,6 @@
+import { createSelector } from 'reselect'
+import { selectFilteredTodos } from '../todos/todosSlice'
+
 export const StatusFilters = {
   All: 'all',
   Active: 'active',
@@ -50,3 +53,11 @@ export default function filtersReducer(state = initialState, action) {
       return state
   }
 }
+
+export const selectUncompletedTodosReselect = createSelector(
+  // First, pass one or more "input selector" functions:
+  (state) => selectFilteredTodos(state),
+  // Then, an "output selector" that receives all the input results as arguments
+  // and returns a final result value
+  (todos) => todos.filter((todo) => !todo.completed)
+)

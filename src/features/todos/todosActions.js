@@ -22,14 +22,14 @@ export const markAllActiveAction = () => {
 }
 
 export const markAllCompleteAction = () => {
-  return { type: 'todos/completedCleared' }
-}
-
-export const clearAllCompletedAction = () => {
   return { type: 'todos/allCompleted' }
 }
 
-export const selectFilteredTodos = (state) => {
+export const clearAllCompletedAction = () => {
+  return { type: 'todos/completedCleared' }
+}
+
+export const selectFilteredTodosByStatus = (state) => {
   if (state.filters.status === StatusFilters.All) {
     return state.todos
   }
