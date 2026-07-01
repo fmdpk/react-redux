@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect'
 import { fetchTodos } from '../../api/fetchData'
 import { StatusFilters } from '../filters/filtersSlice'
 
@@ -8,6 +7,14 @@ export const getAllTodos = (dispatch) => {
 
 export const todoCompleteChange = (data) => {
   return { type: 'todos/todoToggled', payload: data }
+}
+
+export const todoColorChange = (data) => {
+  return { type: 'todos/colorSelected', payload: data }
+}
+
+export const todoDeleted = (id) => {
+  return { type: 'todos/todoDeleted', payload: id }
 }
 
 export const markAllActiveAction = () => {
@@ -22,19 +29,19 @@ export const clearAllCompletedAction = () => {
   return { type: 'todos/allCompleted' }
 }
 
-export const selectFilteredTodos = createSelector(
-  // First input selector: all todos
-  (state) => state.todos,
-  // Second input selector: current status filter
-  (state) => state.filters.status,
-  // Output selector: receives both values
-  (todos, status) => {
-    if (status === StatusFilters.All) {
-      return todos.length
-    }
-
-    const completedStatus = status === StatusFilters.Completed
-    // Return either active or completed todos based on filter
-    return todos.filter((todo) => todo.completed === completedStatus).length
+export const selectFilteredTodos = (state) => {
+  if (state.filters.status === StatusFilters.All) {
+    return state.todos
   }
-)
+  const completedStatus = state.filters.status === StatusFilters.Completed
+  return state.todos.filter((todo) => todo.completed === completedStatus)
+}
+
+export const selectFilteredTodosByColor = (state) => {
+  if (state.filters.colors.length) {
+    return state.todos.filter((todo) =>
+      state.filters.colors.includes(todo.color)
+    )
+  }
+  return state.todos
+}

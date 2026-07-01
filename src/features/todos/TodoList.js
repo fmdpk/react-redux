@@ -2,7 +2,11 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TodoListItem from './TodoListItem'
 import { StatusFilters } from '../filters/filtersSlice'
-import { todoCompleteChange } from './todosActions'
+import {
+  todoColorChange,
+  todoCompleteChange,
+  todoDeleted,
+} from './todosActions'
 import { createSelector } from 'reselect'
 
 const selectTodoIds = (state) => {
@@ -51,13 +55,11 @@ const TodoList = () => {
   // const todoIds = useSelector(selectTodoIds, shallowEqual)
   const todoIds = useSelector(selectTodoIdsReselect)
   const dispatch = useDispatch()
-  console.log(todoIds)
 
   const onCompletedChange = (data) => dispatch(todoCompleteChange(data.id))
 
-  const onDelete = (id) => dispatch({ type: 'todos/todoDeleted', payload: id })
-  const onColorChange = (data) =>
-    dispatch({ type: 'todos/colorSelected', payload: data })
+  const onDelete = (id) => dispatch(todoDeleted(id))
+  const onColorChange = (data) => dispatch(todoColorChange(data))
 
   // since `todos` is an array, we can loop over it
   const renderedListItems = todoIds.map((id) => {

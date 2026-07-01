@@ -3,7 +3,10 @@ import React from 'react'
 import { availableColors, capitalize } from '../filters/colors'
 import { StatusFilters } from '../filters/filtersSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { colorFilterChanged } from '../filters/filtersActions'
+import {
+  colorFilterChanged,
+  statusFilterChanged,
+} from '../filters/filtersActions'
 import {
   clearAllCompletedAction,
   markAllActiveAction,
@@ -114,13 +117,11 @@ const Footer = () => {
   const todosRemaining = useSelector(selectTotalCompletedTodos)
 
   const onColorChange = (color, changeType) => {
-    console.log('Color change: ', { color, changeType })
-    colorFilterChanged(color, changeType)
+    dispatch(colorFilterChanged(color, changeType))
   }
 
   const onStatusChange = (status) => {
-    console.log(status)
-    dispatch({ type: 'filters/statusFilterChanged', payload: status })
+    dispatch(statusFilterChanged(status))
   }
 
   const markAllCompleted = () => {
@@ -150,7 +151,7 @@ const Footer = () => {
         </button>
       </div>
 
-      <RemainingTodos count={todosRemaining} />
+      <RemainingTodos count={todosRemaining.length} />
       <StatusFilter value={status} onChange={onStatusChange} />
       <ColorFilters value={colors} onChange={onColorChange} />
     </footer>
